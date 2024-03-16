@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<title>To-Do Manager</title>
+{% endblock %}
+
+{% block body %}
+<div class="wrapper">
+    <h1 style="text-align: center">To-Do Manager</h1>
+    {% if tasks|length < 1 %}
+    <h4 style="text-align: center">No tasks Yet. Create one below!</h4>
+    {% else %}
+    <div class="container">
+        <table>
+            <tr>
+                <th>To-Do</th>
+                <th>Added</th>
+                <th>Actions</th>
+            </tr>
+            {% for task in tasks %}
+                <tr>
+                    <td>{{ task.content }}</td>
+                    <td>{{ task.date_created.date() }}</td>
+                    <td>
+                        <a href="/delete/{{task.id}}">Delete</a>
+                        <br>
+                        <a href="/update/{{task.id}}">Update</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+    {% endif %}
+
+    <div class="form">
+        <form action="/" method="POST" onsubmit="return validateForm()">
+            <input type="text" name="content" id="content">
+            <input type="submit" value="Add Task">
+        </form>
+    </div>
+</div>
+
+<script>
+    function validateForm() {
+        var taskContent = document.getElementById("content").value.trim();
+        if (taskContent === "") {
+            alert("To-Do list is Empty!");
+            return false; // Prevent form submission
+        }
+        return true; // Allow form submission
+    }
+</script>
+{% endblock %}
